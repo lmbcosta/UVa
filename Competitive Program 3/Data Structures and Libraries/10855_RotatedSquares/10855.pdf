@@ -1,0 +1,84 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+
+public class RotatedSquares {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader( new InputStreamReader(System.in));
+		boolean continua = true;
+		int sizeBig;
+		int sizeSma;
+
+		while(continua){
+			String[] linha = br.readLine().split(" ");
+			sizeBig = Integer.parseInt(linha[0]);
+			sizeSma = Integer.parseInt(linha[1]);
+
+			//teste continua;
+			if(sizeBig == 0 && sizeSma == 0){
+				continua = false;
+			}else{
+				char[][] big = new char[sizeBig][sizeBig];
+				for(int i = 0; i < sizeBig; i++){
+					String line = br.readLine();
+					for(int j= 0; j < sizeBig; j++){
+						big[i][j] = line.charAt(j);
+					}
+				}
+				char[][] sma = new char[sizeSma][sizeSma];
+				for(int i = 0; i < sizeSma; i++){
+					String line = br.readLine();
+					for(int j= 0; j < sizeSma; j++){
+						sma[i][j] = line.charAt(j);
+					}
+				}
+
+				int[] counters = new int[4];
+
+
+				for(int h = 0; h < 4; h++){
+					if(h > 0){
+						sma = rotateRight(sma);
+					}
+					int l = sizeBig - sizeSma + 1;
+					for(int i = 0; i < l; i++){
+						for(int j = 0; j < l; j++){
+							boolean existe = true;
+							for(int w = 0; w < sizeSma; w++){
+								for(int p = 0; p < sizeSma; p++){
+									if(sma[w][p] != big[i+w][j+p]){
+										existe = false;
+										break;
+									}
+								}
+								if(!existe){break;}
+							}
+							if(existe){
+								counters[h]++;
+							}
+						}
+					}
+					//verificar sma in big
+				}
+				
+				System.out.print(counters[0]+" ");
+				System.out.print(counters[1]+" ");
+				System.out.print(counters[2]+" ");
+				System.out.println(counters[3]);
+
+			}
+		}
+
+	}
+	public static char[][] rotateRight(char[][] m){
+		int l = m.length;
+		char[][] aux = new char[l][l];
+		for(int i = 0; i < l; i++){
+			for(int j = 0; j < l; j++){
+				aux[j][l-i-1] = m[i][j];
+			}
+		}
+		return aux;
+	}
+}
